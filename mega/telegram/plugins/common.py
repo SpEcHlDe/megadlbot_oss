@@ -33,7 +33,7 @@ async def start_message_handler(c: Client, m: Message):
                     )
     else:
         await m.reply_text(
-            text=f"Hello! My name is Megatron {emoji.MAN_BOWING_DARK_SKIN_TONE}"
+            text=f"Hello! My name is Megatron {emoji.MAN_BOWING_DARK_SKIN_TONE}\nI can do many things for you(only for you)."
         )
 
 
