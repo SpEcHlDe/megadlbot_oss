@@ -5,7 +5,7 @@ import asyncio
 import base64
 import logging
 import aiofiles
-import youtube_dl
+import yt_dlp
 import humanfriendly as size
 from mega.common import Common
 from pyrogram.types import Message
@@ -138,10 +138,10 @@ class YTdl:
 
     @staticmethod
     def ytdl_download(ytdl_options: dict, url: str):
-        youtube_dl.utils.std_headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) ' \
+        yt_dlp.utils.std_headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) ' \
                                                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 ' \
                                                      'Safari/537.36 '
-        with youtube_dl.YoutubeDL(ytdl_options) as ydl:
+        with yt_dlp.YoutubeDL(ytdl_options) as ydl:
             ydl.download([url])
         return True
 
@@ -149,7 +149,7 @@ class YTdl:
     async def yt_media_info(msg: Message):
         ytdl_options = {}
 
-        with youtube_dl.YoutubeDL(ytdl_options) as ydl:
+        with yt_dlp.YoutubeDL(ytdl_options) as ydl:
             video_info = ydl.extract_info(url=msg.text, download=False)
 
         neko_link = await Nekobin().nekofy(str(json.dumps(video_info, indent=2)))
