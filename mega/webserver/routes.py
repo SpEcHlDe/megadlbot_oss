@@ -53,10 +53,8 @@ async def media_streamer(request, message_id: int):
     body = TGCustomYield().yield_file(media_msg, offset, first_part_cut, last_part_cut, part_count,
                                       new_chunk_size)
 
-    file_name = file_properties.file_name if file_properties.file_name \
-        else f"{secrets.token_hex(2)}.jpeg"
-    mime_type = file_properties.mime_type if file_properties.mime_type \
-        else f"{mimetypes.guess_type(file_name)}"
+    file_name = file_properties.file_name or f"{secrets.token_hex(2)}.jpeg"
+    mime_type = file_properties.mime_type or f"{mimetypes.guess_type(file_name)}"
 
     return_resp = web.Response(
         status=206 if range_header else 200,
@@ -90,7 +88,7 @@ async def seedr_stream_handler(request):
 
     body = SeedrAPI().yield_seedr_stream(user_id, folder_id, range_head)
 
-    return_resp = web.Response(
+    return web.Response(
         status=206 if offset else 200,
         body=body,
         headers={
@@ -98,8 +96,6 @@ async def seedr_stream_handler(request):
             "Content-Length": str(limit - offset),
             'Content-Type': headers.get('Content-Type'),
             'Content-Disposition': f'inline; filename="{secrets.token_hex(4)}.zip"',
-            'Accept-ranges': 'bytes'
-        }
+            'Accept-ranges': 'bytes',
+        },
     )
-
-    return return_resp

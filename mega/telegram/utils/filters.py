@@ -15,18 +15,12 @@ def callback_query(args: str, payload=True):
             thing = r"{}\_"
             if re.search(re.compile(thing.format(ftl.data)), query.data):
                 search = re.search(re.compile(r"\_{1}(.*)"), query.data)
-                if search:
-                    query.payload = search.group(1)
-                else:
-                    query.payload = None
-
+                query.payload = search.group(1) if search else None
                 return True
 
-            return False
-        else:
-            if ftl.data == query.data:
-                return True
+        elif ftl.data == query.data:
+            return True
 
-            return False
+        return False
 
     return create(func, 'CustomCallbackQuery', data=args)

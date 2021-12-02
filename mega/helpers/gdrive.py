@@ -46,9 +46,6 @@ class Gdrive:
                 media = MediaIoBaseUpload(io.BytesIO(mfile),
                                           mimetype=mime_type,
                                           resumable=True)
-                gfile = service.files().create(body=file_metadata,
-                                               media_body=media,
-                                               fields='id').execute()
             else:
                 file_name = os.path.basename(mfile)
                 mime_type = (mimetypes.guess_type(file_name))[0] if (mimetypes.guess_type(file_name))[0] is not None else \
@@ -62,10 +59,9 @@ class Gdrive:
                                         mimetype=mime_type,
                                         resumable=True)
 
-                gfile = service.files().create(body=file_metadata,
-                                               media_body=media,
-                                               fields='id').execute()
-
+            gfile = service.files().create(body=file_metadata,
+                                           media_body=media,
+                                           fields='id').execute()
             service.permissions().create(body={"role": "reader", "type": "anyone"}, fileId=gfile.get("id")).execute()
             await Gdrive().clean_old_files(service)
 

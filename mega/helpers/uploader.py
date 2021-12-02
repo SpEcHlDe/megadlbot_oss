@@ -43,7 +43,7 @@ class UploadFiles:
 
         try:
             user_details = await MegaUsers().get_user(ack_message.chat.id)
-            if user_details['dld_settings'] == 'default':
+            if user_details['dld_settings'] in ['default', 'f-docs']:
                 if str(file_type[0]).split("/")[0].lower() == "audio":
                     file_message = await MegaDLBot.send_audio(
                         chat_id=ack_message.chat.id,
@@ -53,11 +53,6 @@ class UploadFiles:
                     )
 
                     await UploadFiles().send_file_to_dustbin(file_message, "audio", url, f_type)
-                    await UploadFiles().handle_gdrive(file_message,
-                                                      ack_message,
-                                                      temp_file if f_type != "bytesIO" else m_file,
-                                                      f_type,
-                                                      f_name)
                 else:
                     file_message = await MegaDLBot.send_document(
                         chat_id=ack_message.chat.id,
@@ -67,39 +62,11 @@ class UploadFiles:
                     )
 
                     await UploadFiles().send_file_to_dustbin(file_message, "doc", url, f_type)
-                    await UploadFiles().handle_gdrive(file_message,
-                                                      ack_message,
-                                                      temp_file if f_type != "bytesIO" else m_file,
-                                                      f_type,
-                                                      f_name)
-            elif user_details['dld_settings'] == 'f-docs':
-                if str(file_type[0]).split("/")[0].lower() == "audio":
-                    file_message = await MegaDLBot.send_audio(
-                        chat_id=ack_message.chat.id,
-                        audio=temp_file if f_type != "bytesIO" else io_file,
-                        progress=UploadFiles().upload_progress_hook,
-                        progress_args=[ack_message.chat.id, ack_message.message_id]
-                    )
-
-                    await UploadFiles().send_file_to_dustbin(file_message, "audio", url, f_type)
-                    await UploadFiles().handle_gdrive(file_message,
-                                                      ack_message,
-                                                      temp_file if f_type != "bytesIO" else m_file,
-                                                      f_type,
-                                                      f_name)
-                else:
-                    file_message = await MegaDLBot.send_document(
-                        chat_id=ack_message.chat.id,
-                        document=temp_file if f_type != "bytesIO" else io_file,
-                        progress=UploadFiles().upload_progress_hook,
-                        progress_args=[ack_message.chat.id, ack_message.message_id]
-                    )
-                    await UploadFiles().send_file_to_dustbin(file_message, "doc", url, f_type)
-                    await UploadFiles().handle_gdrive(file_message,
-                                                      ack_message,
-                                                      temp_file if f_type != "bytesIO" else m_file,
-                                                      f_type,
-                                                      f_name)
+                await UploadFiles().handle_gdrive(file_message,
+                                                  ack_message,
+                                                  temp_file if f_type != "bytesIO" else m_file,
+                                                  f_type,
+                                                  f_name)
             elif user_details['dld_settings'] == 'ct-docs':
                 temp_thumb = await UploadFiles().get_thumbnail(user_details['custom_thumbnail'])
                 if str(file_type[0]).split("/")[0].lower() == "audio":
@@ -112,11 +79,6 @@ class UploadFiles:
                     )
 
                     await UploadFiles().send_file_to_dustbin(file_message, "audio", url, f_type)
-                    await UploadFiles().handle_gdrive(file_message,
-                                                      ack_message,
-                                                      temp_file if f_type != "bytesIO" else m_file,
-                                                      f_type,
-                                                      f_name)
                 else:
                     file_message = await MegaDLBot.send_document(
                         chat_id=ack_message.chat.id,
@@ -126,11 +88,11 @@ class UploadFiles:
                         thumb=temp_thumb
                     )
                     await UploadFiles().send_file_to_dustbin(file_message, "doc", url, f_type)
-                    await UploadFiles().handle_gdrive(file_message,
-                                                      ack_message,
-                                                      temp_file if f_type != "bytesIO" else m_file,
-                                                      f_type,
-                                                      f_name)
+                await UploadFiles().handle_gdrive(file_message,
+                                                  ack_message,
+                                                  temp_file if f_type != "bytesIO" else m_file,
+                                                  f_type,
+                                                  f_name)
                 if os.path.exists(temp_thumb):
                     os.remove(temp_thumb)
             elif user_details['dld_settings'] == 'ct-videos':
@@ -145,11 +107,6 @@ class UploadFiles:
                         thumb=temp_thumb
                     )
                     await UploadFiles().send_file_to_dustbin(file_message, "video", url, f_type)
-                    await UploadFiles().handle_gdrive(file_message,
-                                                      ack_message,
-                                                      temp_file if f_type != "bytesIO" else m_file,
-                                                      f_type,
-                                                      f_name)
                 elif str(file_type[0]).split("/")[0].lower() == "audio":
                     file_message = await MegaDLBot.send_audio(
                         chat_id=ack_message.chat.id,
@@ -160,11 +117,6 @@ class UploadFiles:
                     )
 
                     await UploadFiles().send_file_to_dustbin(file_message, "audio", url, f_type)
-                    await UploadFiles().handle_gdrive(file_message,
-                                                      ack_message,
-                                                      temp_file if f_type != "bytesIO" else m_file,
-                                                      f_type,
-                                                      f_name)
                 else:
                     file_message = await MegaDLBot.send_document(
                         chat_id=ack_message.chat.id,
@@ -174,11 +126,11 @@ class UploadFiles:
                         thumb=temp_thumb
                     )
                     await UploadFiles().send_file_to_dustbin(file_message, "doc", url, f_type)
-                    await UploadFiles().handle_gdrive(file_message,
-                                                      ack_message,
-                                                      temp_file if f_type != "bytesIO" else m_file,
-                                                      f_type,
-                                                      f_name)
+                await UploadFiles().handle_gdrive(file_message,
+                                                  ack_message,
+                                                  temp_file if f_type != "bytesIO" else m_file,
+                                                  f_type,
+                                                  f_name)
                 if os.path.exists(temp_thumb):
                     os.remove(temp_thumb)
 
@@ -188,12 +140,11 @@ class UploadFiles:
                     chat_id=ack_message.chat.id,
                     message_ids=ack_message.message_id
                 )
-                if f_type != "bytesIO":
-                    if os.path.exists(temp_file):
-                        try:
-                            shutil.rmtree(os.path.dirname(temp_file))
-                        except Exception as e:
-                            logging.error(str(e))
+                if f_type != "bytesIO" and os.path.exists(temp_file):
+                    try:
+                        shutil.rmtree(os.path.dirname(temp_file))
+                    except Exception as e:
+                        logging.error(str(e))
 
     @staticmethod
     async def send_file_to_dustbin(file_message: Message, media_type: str, url: str, f_type: str):

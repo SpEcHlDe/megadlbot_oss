@@ -161,7 +161,7 @@ class SeedrAPI:
 
         x = 0
         for file in extracted_files:
-            x = x + 1
+            x += 1
             try:
                 await ack_msg.edit_text(
                     text=f"Uploading {x} of {len(extracted_files)}",
@@ -185,14 +185,13 @@ class SeedrAPI:
         user_details = await MegaUsers().get_user(user_id)
         async with aiohttp.ClientSession() as seedr_session:
             async with seedr_session.get(
-                    url=f"{self.web_dav}/folder/{folder_id}/download",
-                    auth=aiohttp.BasicAuth(
-                        user_details["seedr_username"],
-                        user_details["seedr_passwd"]
-                    )
-            ) as resp:
-                header = resp.headers
-                return header
+                            url=f"{self.web_dav}/folder/{folder_id}/download",
+                            auth=aiohttp.BasicAuth(
+                                user_details["seedr_username"],
+                                user_details["seedr_passwd"]
+                            )
+                    ) as resp:
+                return resp.headers
 
     async def yield_seedr_stream(self, user_id: int, folder_id: str, header: dict) -> AsyncGenerator[bytes, None]:
         user_details = await MegaUsers().get_user(user_id)

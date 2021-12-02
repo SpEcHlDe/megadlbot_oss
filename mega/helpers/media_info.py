@@ -22,11 +22,10 @@ class MediaInfo:
 
         if m_info is None:
             return False
-        else:
-            temp_file = os.path.join(Common().working_dir, f"{secrets.token_hex(2)}.txt")
-            async with aiofiles.open(temp_file, mode="w") as m_file:
-                await m_file.write(str(json.dumps(m_info, indent=2)))
+        temp_file = os.path.join(Common().working_dir, f"{secrets.token_hex(2)}.txt")
+        async with aiofiles.open(temp_file, mode="w") as m_file:
+            await m_file.write(str(json.dumps(m_info, indent=2)))
 
-            neko_link = await Nekobin().nekofy(str(json.dumps(m_info, indent=2)))
+        neko_link = await Nekobin().nekofy(str(json.dumps(m_info, indent=2)))
 
         return temp_file, neko_link
